@@ -8,8 +8,8 @@
       </p>
       /
       <p class="text">
-        {{ Math.floor(max_temp[0].main.temp_max) }}°C
         <img :src="maxtemp" alt="maxtemp" :style="'width: 20px'" />
+        {{ Math.floor(max_temp[0].main.temp_max) }}°C
       </p>
     </div>
   </div>
@@ -24,12 +24,8 @@ export default {
     return {
       mintemp: mintemp,
       maxtemp: maxtemp,
-      min_temp: [...this.weather].sort(
-        (a, b) => a.main.temp_min - b.main.temp_min
-      ),
-      max_temp: [...this.weather].sort(
-        (a, b) => b.main.temp_max - a.main.temp_max
-      ),
+      min_temp: [],
+      max_temp: [],
     };
   },
   computed: {
@@ -53,6 +49,24 @@ export default {
         default:
           return "";
       }
+    },
+  },
+  watch: {
+    weather: {
+      immediate: true,
+      handler(newWeather) {
+        this.updateWeatherData(newWeather);
+      },
+    },
+  },
+  methods: {
+    updateWeatherData(newWeather) {
+      this.min_temp = [...newWeather].sort(
+        (a, b) => a.main.temp_min - b.main.temp_min
+      );
+      this.max_temp = [...newWeather].sort(
+        (a, b) => b.main.temp_max - a.main.temp_max
+      );
     },
   },
 };
